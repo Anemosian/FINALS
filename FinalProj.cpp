@@ -41,7 +41,8 @@ public:
 	float segments = 8;
 	float radius = 5;
 	float speedx = 8;
-	flaot speedy = 1;
+	float speedy = 1;
+	float bounces = 0;
 };
 
 class vec2
@@ -243,78 +244,134 @@ void keyboard() {
 		}
 	}
 }
-
 void collisionChecker() {
 	//left wall collision
-	if (b1.x < 0)
+	if (b1.x - b1.radius < 0)
 	{
-		b1.x = 0;
-		b1.y = 0;
-		p1.lock = false;
-		p1.fired = false;
+		if(b1.bounces < 5)
+		{
+			b1.speedx *= -1;
+			b1.bounces ++;			
+		}
+		else
+		{
+			b1.x = 0;
+			b1.y = 0;
+			b1.bounces = 0;
+			p1.lock = false;
+			p1.fired = false;
+		}
 	}
-	if (b2.x < 0)
+	if (b2.x - b2.radius < 0)
 	{
-		b2.x = 0;
-		b2.y = 0;
-		p2.lock = false;
-		p2.fired = false;	
+		if(b2.bounces < 5)
+		{
+			b2.speedx *= -1;
+			b2.bounces ++;			
+		}
+		else
+		{
+			b2.x = 0;
+			b2.y = 0;
+			b2.bounces = 0;
+			p2.lock = false;
+			p2.fired = false;	
+		}
 	}
 	//right wall collision
-	if (b1.x > width)
+	if (b1.x + b1.radius> width)
 	{
-		b1.x = 0;
-		b1.y = 0;
-		p1.lock = false;
-		p1.fired = false;
+		if(b1.bounces < 5)
+		{
+			b1.speedx *= -1;
+			b1.bounces ++;			
+		}
+		else
+		{
+			b1.x = 0;
+			b1.y = 0;
+			b1.bounces = 0;
+			p1.lock = false;
+			p1.fired = false;
+		}
 	}
-	if (b2.x > width) {
-		b2.x = 0;
-		b2.y = 0;
-		p2.fired = false;
-		p2.lock = false;
+	if (b2.x + b2.radius> width) 
+	{
+		if(b2.bounces < 5)
+		{
+			b2.speedx *= -1;
+			b2.bounces ++;			
+		}
+		else
+		{
+			b2.x = 0;
+			b2.y = 0;
+			b2.bounces = 0;
+			p2.lock = false;
+			p2.fired = false;	
+		}
 	}
 
 
 	//top /bot wall collision
-	if (b1.y > height - 20 || b1.y < 10)
+	if (b1.y + b1.radius > height - 20 || b1.y - b1.radius < 10)
 	{
-		b1.x = 0;
-		b1.y = 0;
-		p1.lock = false;
-		p1.fired = false;
+		if(b1.bounces < 5)
+		{
+			b1.speedy *= -1;
+			b1.bounces ++;			
+		}
+		else
+		{
+			b1.x = 0;
+			b1.y = 0;
+			b1.bounces = 0;
+			p1.lock = false;
+			p1.fired = false;
+		}
 	}
-	if (b2.y > height - 20 || b2.y < 10)
+	if (b2.y + b2.radius > height - 20 || b2.y - b2.radius < 10)
 	{
-		b2.x = 0;
-		b2.y = 0;
-		p2.lock = false;
-		p2.fired = false;
+		if(b2.bounces < 5)
+		{
+			b2.speedx *= -1;
+			b2.bounces ++;			
+		}
+		else
+		{
+			b2.x = 0;
+			b2.y = 0;
+			b2.bounces = 0;
+			p2.lock = false;
+			p2.fired = false;	
+		}
 	}
 
 	//player collision
-	if ((b2.x >= p1.x) &&
-		(b2.x <= p1.x + p1.width) &&
-		(b2.y <= p1.y + p1.height) &&
-		(b2.y >= p1.y))
+	if ((b2.x + b2.radius  >= p1.x) &&
+		(b2.x + b2.radius  <= p1.x + p1.width) &&
+		(b2.y + b2.radius <= p1.y + p1.height) &&
+		(b2.y + b2.radius >= p1.y))
 	{
 		b2.x = 0;
 		b2.y = 0;
 		p2.lock = false;
 		p2.fired = false;
+		p2.score += b2.bounces;
 		p1.x = p1.spawnx;
 		p1.y = p1.spawny;
 		p1.lives--;
 	}
-	if ((b1.x >= p2.x) &&
-		(b1.x <= p2.x + p2.width) &&
-		(b1.y <= p2.y + p2.height) &&
-		(b1.y >= p2.y))
+	if ((b1.x + b1.radius >= p2.x) &&
+		(b1.x + b1.radius <= p2.x + p2.width) &&
+		(b1.y + b1.radius <= p2.y + p2.height) &&
+		(b1.y + b1.radius >= p2.y))
 	{
 		b1.x = 0;
 		b1.y = 0;
 		p1.lock = false;
 		p1.fired = false;
+		p1.score += b1.bounces;
 		p2.x = p2.spawnx;
 		p2.y = p2.spawny;
 		p2.lives--;
