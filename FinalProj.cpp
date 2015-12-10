@@ -257,6 +257,8 @@ void collisionChecker() {
 		{
 			b1.x = 0;
 			b1.y = 0;
+			b1.speedx = 8;
+			b1.speedy = 1;
 			b1.bounces = 0;
 			p1.lock = false;
 			p1.fired = false;
@@ -273,6 +275,8 @@ void collisionChecker() {
 		{
 			b2.x = 0;
 			b2.y = 0;
+			b2.speedx = 8;
+			b2.speedy = 1;
 			b2.bounces = 0;
 			p2.lock = false;
 			p2.fired = false;	
@@ -290,6 +294,8 @@ void collisionChecker() {
 		{
 			b1.x = 0;
 			b1.y = 0;
+			b1.speedx = 8;
+			b1.speedy = 1;
 			b1.bounces = 0;
 			p1.lock = false;
 			p1.fired = false;
@@ -306,6 +312,8 @@ void collisionChecker() {
 		{
 			b2.x = 0;
 			b2.y = 0;
+			b2.speedx = 8;
+			b2.speedy = 1;
 			b2.bounces = 0;
 			p2.lock = false;
 			p2.fired = false;	
@@ -325,6 +333,8 @@ void collisionChecker() {
 		{
 			b1.x = 0;
 			b1.y = 0;
+			b1.speedx = 8;
+			b1.speedy = 1;
 			b1.bounces = 0;
 			p1.lock = false;
 			p1.fired = false;
@@ -342,6 +352,8 @@ void collisionChecker() {
 			b2.x = 0;
 			b2.y = 0;
 			b2.bounces = 0;
+			b2.speedx = 8;
+			b2.speedy = 1;
 			p2.lock = false;
 			p2.fired = false;	
 		}
@@ -355,6 +367,8 @@ void collisionChecker() {
 	{
 		b2.x = 0;
 		b2.y = 0;
+		b2.speedx = 8;
+		b2.speedy = 1;
 		p2.lock = false;
 		p2.fired = false;
 		p2.score += b2.bounces;
@@ -369,6 +383,8 @@ void collisionChecker() {
 	{
 		b1.x = 0;
 		b1.y = 0;
+		b1.speedx = 8;
+		b1.speedy = 1;
 		p1.lock = false;
 		p1.fired = false;
 		p1.score += b1.bounces;
