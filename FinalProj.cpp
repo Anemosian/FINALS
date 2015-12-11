@@ -446,7 +446,9 @@ void collisionChecker() {
 		p2.y = p2.spawny;
 		p2.lives--;
 	}
-		if(((b1.x+b1.radius >= width/3)&&
+	
+	//block collision
+	if(((b1.x+b1.radius >= width/3)&&
 		(b1.y + b1.radius >= height/3)&&
 		(b1.y + b1.radius <= height/3 + block.height))||
 		((b1.x+b1.radius >= (width/3)*2)&&
@@ -454,7 +456,7 @@ void collisionChecker() {
 		(b1.y + b1.radius <= height/3 + block.height))||
 		((b1.x+b1.radius >= width/2)&&
 		(b1.y + b1.radius >= (height/3)*2)&&
-		(b1.y + b1.radius <= (height/3)*2) + block.height))||
+		(b1.y + b1.radius <= (height/3)*2) + block.height)||
 		((b1.x+b1.radius >= width/2)&&
 		(b1.y + b1.radius >= land.height)&&
 		(b1.y + b1.radius <= land.height + block.height)))
@@ -476,7 +478,7 @@ void collisionChecker() {
 			}
 			
 		}	
-	if((b2.x+b2.radius >= width/3)&&
+	if(((b2.x+b2.radius >= width/3)&&
 		(b2.y + b2.radius >= height/3)&&
 		(b2.y + b2.radius <= height/3 + block.height))||
 		((b2.x+b2.radius >= (width/3)*2)&&
@@ -484,10 +486,10 @@ void collisionChecker() {
 		(b2.y + b2.radius <= height/3 + block.height))||
 		((b2.x+b2.radius >= width/2)&&
 		(b2.y + b2.radius >= (height/3)*2)&&
-		(b2.y + b2.radius <= (height/3)*2) + block.height))||
+		(b2.y + b2.radius <= (height/3)*2) + block.height)||
 		((b2.x+b2.radius >= width/2)&&
 		(b2.y + b2.radius >= land.height)&&
-		(b2.y + b2.radius <= land.height + block.height))
+		(b2.y + b2.radius <= land.height + block.height)))
 		{
 			if(b2.bounces < 5)
 			{	
@@ -510,12 +512,12 @@ void collisionChecker() {
 			
 				
 			
-		if(((b1.x+b1.radius <= width/3 + block.width)&&
+			if(((b1.x+b1.radius <= width/3 + block.width)&&
 		(b1.y + b1.radius >= height/3)&&
 		(b1.y + b1.radius <= height/3 + block.height))||
 		((b1.x+b1.radius <= (width/3)*2+ block.width)&&
 		(b1.y + b1.radius >= height/3)&&
-		(b1.y + b1.radius <= height/3 + block.height))||
+		(b1.y + b1.radius <= height/3 + block.height)||
 		((b1.x+b1.radius <= width/2+ block.width)&&
 		(b1.y + b1.radius >= (height/3)*2)&&
 		(b1.y + b1.radius <= (height/3)*2) + block.height))||
@@ -540,15 +542,15 @@ void collisionChecker() {
 			}
 			
 		}	
-		if(((b2.x+b2.radius <= width/3 + block.width)&&
+			if(((b2.x+b2.radius <= width/3 + block.width)&&
 		(b2.y + b2.radius >= height/3)&&
 		(b2.y + b2.radius <= height/3 + block.height))||
 		((b2.x+b2.radius <= (width/3)*2+ block.width)&&
 		(b2.y + b2.radius >= height/3)&&
-		(b2.y + b2.radius <= height/3 + block.height))||
+		(b2.y + b2.radius <= height/3 + block.heigh))||
 		((b2.x+b2.radius <= width/2+ block.width)&&
 		(b2.y + b2.radius >= (height/3)*2)&&
-		(b2.y + b2.radius <= (height/3)*2) + block.height))||
+		(b2.y + b2.radius <= (height/3)*2) + block.height)||
 		((b2.x+b2.radius <= width/2+ block.width)&&
 		(b2.y + b2.radius >= land.height)&&
 		(b2.y + b2.radius <= land.height + block.height)))
@@ -575,8 +577,6 @@ void collisionChecker() {
 				
 			
 		
-			
-			
 				
 			
 		
