@@ -122,7 +122,6 @@ public:
 		lives = 5;
 		dir = true;
 		lock = false;
-		fired = false;
 		angle = "M";
 	}
 };
@@ -315,7 +314,6 @@ void collisionChecker() {
 			b1.speedy = 0;
 			b1.bounces = 0;
 			p1.lock = false;
-			p1.fired = false;
 		}
 	}
 	if (b2.x - b2.radius < 0)
@@ -333,11 +331,10 @@ void collisionChecker() {
 			b2.speedx = -8;
 			b2.speedy = 0;
 			p2.lock = false;
-			p2.fired = false;
 		}
 	}
 	//right wall collision
-	if (b1.x + b1.radius> width)
+	if (b1.x + b1.radius > width)
 	{
 		if (b1.bounces < 5)
 		{
@@ -352,10 +349,9 @@ void collisionChecker() {
 			b1.speedx = 8;
 			b1.speedy = 0;
 			p1.lock = false;
-			p1.fired = false;
 		}
 	}
-	if (b2.x + b2.radius> width)
+	if (b2.x + b2.radius > width)
 	{
 		if (b2.bounces < 5)
 		{
@@ -370,7 +366,6 @@ void collisionChecker() {
 			b2.speedy = 0;
 			b2.bounces = 0;
 			p2.lock = false;
-			p2.fired = false;
 		}
 	}
 
@@ -391,7 +386,6 @@ void collisionChecker() {
 			b1.speedx = 8;
 			b1.speedy = 0;
 			p1.lock = false;
-			p1.fired = false;
 		}
 	}
 	if (b2.y + b2.radius > height - 20 || b2.y - b2.radius < 10)
@@ -409,7 +403,6 @@ void collisionChecker() {
 			b2.speedy = 0;
 			b2.bounces = 0;
 			p2.lock = false;
-			p2.fired = false;
 		}
 	}
 
@@ -424,7 +417,6 @@ void collisionChecker() {
 		b2.speedx = -8;
 		b2.speedy = 0;
 		p2.lock = false;
-		p2.fired = false;
 		p2.score += b2.bounces;
 		p1.x = p1.spawnx;
 		p1.y = p1.spawny;
@@ -440,146 +432,80 @@ void collisionChecker() {
 		b1.speedx = 8;
 		b1.speedy = 0;
 		p1.lock = false;
-		p1.fired = false;
 		p1.score += b1.bounces;
 		p2.x = p2.spawnx;
 		p2.y = p2.spawny;
 		p2.lives--;
 	}
-	
-	//block collision
-	if(((b1.x+b1.radius >= width/3)&&
-		(b1.y + b1.radius >= height/3)&&
-		(b1.y + b1.radius <= height/3 + block.height))||
-		((b1.x+b1.radius >= (width/3)*2)&&
-		(b1.y + b1.radius >= height/3)&&
-		(b1.y + b1.radius <= height/3 + block.height))||
-		((b1.x+b1.radius >= width/2)&&
-		(b1.y + b1.radius >= (height/3)*2)&&
-		(b1.y + b1.radius <= (height/3)*2) + block.height)||
-		((b1.x+b1.radius >= width/2)&&
-		(b1.y + b1.radius >= land.height)&&
-		(b1.y + b1.radius <= land.height + block.height)))
+
+	//bullet block collision
+	if (((b1.x + b1.radius >= width / 3) &&
+		(b1.x + b1.radius <= width / 3 + block.width) &&
+		(b1.y + b1.radius >= height / 3) &&
+		(b1.y + b1.radius <= height / 3 + block.height)) ||
+		((b1.x + b1.radius >= (width / 3) * 2) &&
+			(b1.x + b1.radius <= (width / 3) * 2 + block.width) &&
+			(b1.y + b1.radius >= height / 3) &&
+			(b1.y + b1.radius <= height / 3 + block.height)) ||
+		((b1.x + b1.radius >= width / 2) &&
+			(b1.x + b1.radius <= width / 2 + block.width) &&
+			(b1.y + b1.radius >= (height / 3) * 2) &&
+			(b1.y + b1.radius <= (height / 3) * 2) + block.height) ||
+		((b1.x + b1.radius >= width / 2) &&
+			(b1.x + b1.radius <= width / 2 + block.width) &&
+			(b1.y + b1.radius >= land.height) &&
+			(b1.y + b1.radius <= land.height + block.height)))
+	{
+		if (b1.bounces < 5)
 		{
-			if(b1.bounces < 5)
-			{	
-				b1.speedx *= -1;
-				b1.bounces ++;			
-			}
-			else
-			{
-				b1.x = 0;
-				b1.y = 0;
-				b1.bounces = 0;
-				b1.speedx = 8;
-				b1.speedy = 0;
-				p1.lock = false;
-				p1.fired = false;
-			}
-			
-		}	
-	if(((b2.x+b2.radius >= width/3)&&
-		(b2.y + b2.radius >= height/3)&&
-		(b2.y + b2.radius <= height/3 + block.height))||
-		((b2.x+b2.radius >= (width/3)*2)&&
-		(b2.y + b2.radius >= height/3)&&
-		(b2.y + b2.radius <= height/3 + block.height))||
-		((b2.x+b2.radius >= width/2)&&
-		(b2.y + b2.radius >= (height/3)*2)&&
-		(b2.y + b2.radius <= (height/3)*2) + block.height)||
-		((b2.x+b2.radius >= width/2)&&
-		(b2.y + b2.radius >= land.height)&&
-		(b2.y + b2.radius <= land.height + block.height)))
+			b1.speedx *= -1;
+			b1.bounces++;
+		}
+		else
 		{
-			if(b2.bounces < 5)
-			{	
-				b2.speedx *= -1;
-				b2.bounces ++;			
-			}
-			else
-			{
-				b2.x = 0;
-				b2.y = 0;
-				b2.bounces = 0;
-				b2.speedx = 8;
-				b2.speedy = 0;
-				p2.lock = false;
-				p2.fired = false;
-			}
-			
-		}	
-			
-			
-				
-			
-			if(((b1.x+b1.radius <= width/3 + block.width)&&
-		(b1.y + b1.radius >= height/3)&&
-		(b1.y + b1.radius <= height/3 + block.height))||
-		((b1.x+b1.radius <= (width/3)*2+ block.width)&&
-		(b1.y + b1.radius >= height/3)&&
-		(b1.y + b1.radius <= height/3 + block.height)||
-		((b1.x+b1.radius <= width/2+ block.width)&&
-		(b1.y + b1.radius >= (height/3)*2)&&
-		(b1.y + b1.radius <= (height/3)*2) + block.height))||
-		((b1.x+b1.radius <= width/2+ block.width)&&
-		(b1.y + b1.radius >= land.height)&&
-		(b1.y + b1.radius <= land.height + block.height)))
+			b1.x = 0;
+			b1.y = 0;
+			b1.bounces = 0;
+			b1.speedx = 8;
+			b1.speedy = 0;
+			p1.lock = false;
+		}
+
+	}
+	if (((b2.x + b2.radius >= width / 3) &&
+		(b2.x + b2.radius <= width / 3 + block.width) &&
+		(b2.y + b2.radius >= height / 3) &&
+		(b2.y + b2.radius <= height / 3 + block.height)) ||
+		((b2.x + b2.radius >= (width / 3) * 2) &&
+			(b2.x + b2.radius <= (width / 3) * 2 + block.width) &&
+			(b2.y + b2.radius >= height / 3) &&
+			(b2.y + b2.radius <= height / 3 + block.height)) ||
+		((b2.x + b2.radius >= width / 2) &&
+			(b2.x + b2.radius <= width / 2 + block.width) &&
+			(b2.y + b2.radius >= (height / 3) * 2) &&
+			(b2.y + b2.radius <= (height / 3) * 2) + block.height) ||
+		((b2.x + b2.radius >= width / 2) &&
+			(b2.x + b2.radius <= width / 2 + block.width) &&
+			(b2.y + b2.radius >= land.height) &&
+			(b2.y + b2.radius <= land.height + block.height)))
+	{
+		if (b2.bounces < 5)
 		{
-			if(b1.bounces < 5)
-			{	
-				b1.speedx *= -1;
-				b1.bounces ++;			
-			}
-			else
-			{
-				b1.x = 0;
-				b1.y = 0;
-				b1.bounces = 0;
-				b1.speedx = 8;
-				b1.speedy = 0;
-				p1.lock = false;
-				p1.fired = false;
-			}
-			
-		}	
-			if(((b2.x+b2.radius <= width/3 + block.width)&&
-		(b2.y + b2.radius >= height/3)&&
-		(b2.y + b2.radius <= height/3 + block.height))||
-		((b2.x+b2.radius <= (width/3)*2+ block.width)&&
-		(b2.y + b2.radius >= height/3)&&
-		(b2.y + b2.radius <= height/3 + block.heigh))||
-		((b2.x+b2.radius <= width/2+ block.width)&&
-		(b2.y + b2.radius >= (height/3)*2)&&
-		(b2.y + b2.radius <= (height/3)*2) + block.height)||
-		((b2.x+b2.radius <= width/2+ block.width)&&
-		(b2.y + b2.radius >= land.height)&&
-		(b2.y + b2.radius <= land.height + block.height)))
+			b2.speedx *= -1;
+			b2.bounces++;
+		}
+		else
 		{
-			if(b2.bounces < 5)
-			{	
-				b2.speedx *= -1;
-				b2.bounces ++;			
-			}
-			else
-			{
-				b2.x = 0;
-				b2.y = 0;
-				b2.bounces = 0;
-				b2.speedx = 8;
-				b2.speedy = 0;
-				p2.lock = false;
-				p2.fired = false;
-			}
-			
-		}	
-			
-			
-				
-			
-		
-				
-			
-		
+			b2.x = 0;
+			b2.y = 0;
+			b2.bounces = 0;
+			b2.speedx = -8;
+			b2.speedy = 0;
+			p2.lock = false;
+		}
+
+	}
+
 }
 
 //makes gl recognized 2d usage
@@ -692,6 +618,7 @@ void bulletMove() {
 		b2.x -= b2.speedx;
 		b2.y += b2.speedy;
 	}
+
 	collisionChecker();
 }
 
@@ -727,7 +654,7 @@ void draw() {
 	boxDraw(width / 2, land.height, block.width, block.height);
 
 	//score display
-	textDraw(width / 2 - 30, height - 30, inttostr(p1.score) + " : " + inttostr(p2.score) + " " + inttostr(bulletcount));
+	textDraw(width / 2 - 30, height - 30, inttostr(p1.score) + " : " + inttostr(p2.score));
 
 	//swapping buffers
 	glutSwapBuffers();
@@ -739,16 +666,10 @@ void update(int upvalue) {
 	keyboard();
 
 	//timer
-	/*
 	static float prevTime = -1;
 	t = glutGet(GLUT_ELAPSED_TIME) / (float)milli - startTime;
-	if (prevTime < 0.0) {
-	prevTime = t;
-	return;
-	}
 	dt = t - prevTime;
 	prevTime = t;
-	*/
 
 	bulletMove();
 
