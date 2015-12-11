@@ -7,6 +7,7 @@
 #include <iostream>
 #include <conio.h>
 #include <sstream>
+#include <fstream>
 #include <math.h>
 #include <gl\GL.h>
 #include <gl\GLU.h>
@@ -38,11 +39,17 @@ class bullet
 public:
 	float x;
 	float y;
-	float segments = 8;
-	float radius = 5;
-	float speedx = 8;
-	float speedy = 1;
-	float bounces = 0;
+	float segments;
+	float radius;
+	float speed;
+
+	bullet()
+	{
+		segments = 8;
+		radius = 5;
+		speed = 8;
+	}
+
 };
 
 class vec2
@@ -86,20 +93,33 @@ class player
 public:
 	float x;
 	float y;
-	float height = 10;
-	float width = 20;
-	float speed = 5;
+	float height;
+	float width;
+	float speed;
 	float spawnx;
 	float spawny;
-	float lives = 5;
+	float lives;
 	float score;
 	float floorHeight;
-	bool fired = false;
-	bool dir = true;
-	bool lock = false;
+	bool fire;
+	bool dir;
+	bool lock;
+
+	player()
+	{
+		height = 10;
+		width = 20;
+		speed = 5;
+		lives = 5;
+		dir = true;
+		lock = false;
+	}
 };
 
+int bulletcount;
+
 player p1, p2;
+bullet b3[1000];
 bullet b1, b2;
 platform land;
 
@@ -150,6 +170,11 @@ return (n < upper) * n + !(n < upper) * upper;
 */
 
 //void functions
+void addbullet()
+{
+	bulletcount++;
+}
+
 //keyboard controls
 void keyboard() {
 	if (GetAsyncKeyState(VK_P))
@@ -177,7 +202,7 @@ void keyboard() {
 			p1.dir = false;
 		}
 	}
-
+	
 	if (GetAsyncKeyState(VK_D))
 	{
 		if (p1.x + p1.width < width) {
@@ -191,13 +216,8 @@ void keyboard() {
 
 	if (GetAsyncKeyState(VK_F))
 	{
-		if(p1.fired == false)
-		{
-		b1.x = p1.x;
-		b1.y = p1.y;
-		p1.lock = true;
-		p1.fired == true;
-		}
+		b3[bulletcount].x = p1.x;
+		b3[bulletcount].y = p1.y;
 	}
 
 	//p2 controls
@@ -235,159 +255,75 @@ void keyboard() {
 
 	if (GetAsyncKeyState(VK_L))
 	{
-		if (p2.fired == false)
-		{
 		b2.x = p2.x;
 		b2.y = p2.y;
 		p2.lock = true;
-		p2.fired = true;
-		}
 	}
 }
+
 void collisionChecker() {
 	//left wall collision
-	if (b1.x - b1.radius < 0)
+	if (b1.x < 0)
 	{
-		if(b1.bounces < 5)
-		{
-			b1.speedx *= -1;
-			b1.bounces ++;			
-		}
-		else
-		{
-			b1.x = 0;
-			b1.y = 0;
-			b1.speedx = 8;
-			b1.speedy = 1;
-			b1.bounces = 0;
-			p1.lock = false;
-			p1.fired = false;
-		}
+		b1.x = 0;
+		b1.y = 0;
+		p1.lock = false;
 	}
-	if (b2.x - b2.radius < 0)
+	if (b2.x < 0)
 	{
-		if(b2.bounces < 5)
-		{
-			b2.speedx *= -1;
-			b2.bounces ++;			
-		}
-		else
-		{
-			b2.x = 0;
-			b2.y = 0;
-			b2.speedx = 8;
-			b2.speedy = 1;
-			b2.bounces = 0;
-			p2.lock = false;
-			p2.fired = false;	
-		}
+		b2.x = 0;
+		b2.y = 0;
+		p2.lock = false;
 	}
 	//right wall collision
-	if (b1.x + b1.radius> width)
+	if (b1.x > width)
 	{
-		if(b1.bounces < 5)
-		{
-			b1.speedx *= -1;
-			b1.bounces ++;			
-		}
-		else
-		{
-			b1.x = 0;
-			b1.y = 0;
-			b1.speedx = 8;
-			b1.speedy = 1;
-			b1.bounces = 0;
-			p1.lock = false;
-			p1.fired = false;
-		}
+		b1.x = 0;
+		b1.y = 0;
+		p1.lock = false;
 	}
-	if (b2.x + b2.radius> width) 
-	{
-		if(b2.bounces < 5)
-		{
-			b2.speedx *= -1;
-			b2.bounces ++;			
-		}
-		else
-		{
-			b2.x = 0;
-			b2.y = 0;
-			b2.speedx = 8;
-			b2.speedy = 1;
-			b2.bounces = 0;
-			p2.lock = false;
-			p2.fired = false;	
-		}
+	if (b2.x > width) {
+		b2.x = 0;
+		b2.y = 0;
+		p2.lock = false;
 	}
 
 
 	//top /bot wall collision
-	if (b1.y + b1.radius > height - 20 || b1.y - b1.radius < 10)
+	if (b1.y > height - 20 || b1.y < 10)
 	{
-		if(b1.bounces < 5)
-		{
-			b1.speedy *= -1;
-			b1.bounces ++;			
-		}
-		else
-		{
-			b1.x = 0;
-			b1.y = 0;
-			b1.speedx = 8;
-			b1.speedy = 1;
-			b1.bounces = 0;
-			p1.lock = false;
-			p1.fired = false;
-		}
+		b1.x = 0;
+		b1.y = 0;
+		p1.lock = false;
 	}
-	if (b2.y + b2.radius > height - 20 || b2.y - b2.radius < 10)
-	{
-		if(b2.bounces < 5)
-		{
-			b2.speedx *= -1;
-			b2.bounces ++;			
-		}
-		else
-		{
-			b2.x = 0;
-			b2.y = 0;
-			b2.bounces = 0;
-			b2.speedx = 8;
-			b2.speedy = 1;
-			p2.lock = false;
-			p2.fired = false;	
-		}
-	}
-
-	//player collision
-	if ((b2.x + b2.radius  >= p1.x) &&
-		(b2.x + b2.radius  <= p1.x + p1.width) &&
-		(b2.y + b2.radius <= p1.y + p1.height) &&
-		(b2.y + b2.radius >= p1.y))
+	if (b2.y > height - 20 || b2.y < 10)
 	{
 		b2.x = 0;
 		b2.y = 0;
-		b2.speedx = 8;
-		b2.speedy = 1;
 		p2.lock = false;
-		p2.fired = false;
-		p2.score += b2.bounces;
+	}
+
+	//player collision
+	if ((b2.x >= p1.x) &&
+		(b2.x <= p1.x + p1.width) &&
+		(b2.y <= p1.y + p1.height) &&
+		(b2.y >= p1.y))
+	{
+		b2.x = 0;
+		b2.y = 0;
+		p2.lock = false;
 		p1.x = p1.spawnx;
 		p1.y = p1.spawny;
 		p1.lives--;
 	}
-	if ((b1.x + b1.radius >= p2.x) &&
-		(b1.x + b1.radius <= p2.x + p2.width) &&
-		(b1.y + b1.radius <= p2.y + p2.height) &&
-		(b1.y + b1.radius >= p2.y))
+	if ((b1.x >= p2.x) &&
+		(b1.x <= p2.x + p2.width) &&
+		(b1.y <= p2.y + p2.height) &&
+		(b1.y >= p2.y))
 	{
 		b1.x = 0;
 		b1.y = 0;
-		b1.speedx = 8;
-		b1.speedy = 1;
 		p1.lock = false;
-		p1.fired = false;
-		p1.score += b1.bounces;
 		p2.x = p2.spawnx;
 		p2.y = p2.spawny;
 		p2.lives--;
@@ -444,6 +380,33 @@ void ballDraw(float cx, float cy, float r, int segments) {
 	glEnd();
 }
 
+void getplatforms() {
+
+	ifstream datainput;
+
+	string platformdata[12];
+
+	datainput.open("platforms.txt");
+	if (!datainput) {
+		cout << "platforms.txt is not available!" << endl;
+		exit(1);
+	}
+	else {
+		
+
+		for (int i = 0; i < 12; i++)
+		{
+			datainput >> platformdata[i];
+		}
+	}
+
+	for (int cnt = 0; cnt < 12; cnt + 4)
+	{
+		boxDraw(stoi(platformdata[cnt]), stoi(platformdata[cnt + 1]),stoi( platformdata[cnt + 2]), stoi(platformdata[cnt + 3]));
+	}
+}
+
+
 //normalize vectors
 void vecnorm(float &x, float &y) {
 	float length = sqrt((x * x) + (y * y));
@@ -458,21 +421,30 @@ void vecnorm(float &x, float &y) {
 void bulletMove() {
 	if (p1.dir == true)
 	{
-		b1.x += b1.speedx;
+		b1.x += b1.speed;
 	}
 	else if (p1.dir == false)
 	{
-		b1.x -= b1.speedx;
+		b1.x -= b1.speed;
 	}
 
 	if (p2.dir == true)
 	{
-		b2.x += b2.speedx;
+		b2.x += b2.speed;
 	}
 	else if (p2.dir == false)
 	{
-		b2.x -= b2.speedx;
+		b2.x -= b2.speed;
 	}
+	if (p1.dir == true)
+	{
+		b3[bulletcount].x += b3[bulletcount].speed;
+	}
+	else if (p1.dir == false)
+	{
+		b3[bulletcount].x -= b3[bulletcount].speed;
+	}
+	collisionChecker();
 }
 
 //draw on screen
@@ -496,13 +468,16 @@ void draw() {
 	ballDraw(b1.x, b1.y, b1.radius, b1.segments);
 	ballDraw(b2.x, b2.y, b2.radius, b2.segments);
 
+	ballDraw(b3[bulletcount].x, b3[bulletcount].y, b3[bulletcount].radius, b3[bulletcount].segments);
+
 	//paddle display
 	boxDraw(p1.x, p1.y, p1.width, p1.height);
 	boxDraw(p2.x, p2.y, p2.width, p2.height);
 	boxDraw(land.x, land.y, land.width, land.height);
 
+
 	//score display
-	textDraw(width / 2 - 30, height - 30, inttostr(p1.score) + " : " + inttostr(p2.score));
+	textDraw(width / 2 - 30, height - 30, inttostr(p1.score) + " : " + inttostr(p2.score) + " " + inttostr(bulletcount));
 
 	//swapping buffers
 	glutSwapBuffers();
@@ -518,13 +493,13 @@ void update(int upvalue) {
 	static float prevTime = -1;
 	t = glutGet(GLUT_ELAPSED_TIME) / (float)milli - startTime;
 	if (prevTime < 0.0) {
-		prevTime = t;
-		return;
+	prevTime = t;
+	return;
 	}
 	dt = t - prevTime;
 	prevTime = t;
 	*/
-
+	
 	bulletMove();
 
 	//calls update in millisecs
