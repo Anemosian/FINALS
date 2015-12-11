@@ -578,7 +578,11 @@ void draw() {
 	boxDraw(p1.x, p1.y, p1.width, p1.height);
 	boxDraw(p2.x, p2.y, p2.width, p2.height);
 	boxDraw(land.x, land.y, land.width, land.height);
-
+	
+	boxDraw(width/3, height/3, block.width, block.height);
+	boxDraw((width / 3)*2, height / 3, block.width, block.height);
+	boxDraw(width / 2, (height/3)*2 , block.width, block.height);
+	boxDraw(width / 2, land.height, block.width, block.height);
 
 	//score display
 	textDraw(width / 2 - 30, height - 30, inttostr(p1.score) + " : " + inttostr(p2.score) + " " + inttostr(bulletcount));
