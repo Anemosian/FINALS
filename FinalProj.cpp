@@ -35,7 +35,7 @@ public:
 
 	platform()
 	{
-		width = 10;
+		width = 20;
 		height = 100;
 	}
 };
@@ -55,7 +55,7 @@ public:
 	{
 		segments = 8;
 		radius = 5;
-		speedx = 8;
+		speedx = 5;
 		speedy = 0;
 	}
 
@@ -392,7 +392,7 @@ void collisionChecker() {
 	{
 		if (b2.bounces < 5)
 		{
-			b2.speedx *= -1;
+			b2.speedy *= -1;
 			b2.bounces++;
 		}
 		else
@@ -459,6 +459,7 @@ void collisionChecker() {
 		if (b1.bounces < 5)
 		{
 			b1.speedx *= -1;
+			b2.speedy *= -1;
 			b1.bounces++;
 		}
 		else
@@ -492,6 +493,7 @@ void collisionChecker() {
 		if (b2.bounces < 5)
 		{
 			b2.speedx *= -1;
+			b2.speedy *= -1;
 			b2.bounces++;
 		}
 		else
@@ -505,6 +507,7 @@ void collisionChecker() {
 		}
 
 	}
+
 
 }
 
@@ -607,7 +610,6 @@ void bulletMove() {
 		b1.x -= b1.speedx;
 		b1.y += b1.speedy;
 	}
-
 	if (p2.dir == true)
 	{
 		b2.x += b2.speedx;
@@ -622,18 +624,65 @@ void bulletMove() {
 	collisionChecker();
 }
 
+void platform()
+{
+	if ((p1.x >= width / 3 - 5) && (p1.x <= (width / 3) + block.width) && (p1.y >= (height / 3) + block.height))
+	{
+		p1.floorHeight = (height / 3) + block.height;
+	}
+	else if ((p1.x >= ((width / 3) * 2) - 5) && (p1.x <= (width / 3) * 2 + block.width) && (p1.y >= (height / 3) + block.height))
+	{
+		p1.floorHeight = (height / 3) + block.height;
+	}
+	else if ((p1.x >= width / 2 - 5) && (p1.x <= width / 2 + block.width) && (p1.y >= ((height / 3) * 2) + block.height))
+	{
+		p1.floorHeight = ((height / 3) * 2) + block.height;
+	}
+	else if ((p1.x >= width / 3 - 5) && (p1.x <= width / 3 + block.width) && (p1.y >= land.height + block.height))
+	{
+		p1.floorHeight = land.height + block.height;
+	}
+	else
+	{
+		p1.floorHeight = land.height + 5;
+	}
+
+
+	if ((p2.x >= width / 3 - 5) && (p2.x <= width / 3 + block.width) && (p2.y >= (height / 3) + block.height))
+	{
+		p2.floorHeight = (height / 3) + block.height;
+	}
+	else if ((p2.x >= ((width / 3) * 2) - 5) && (p2.x <= (width / 3) * 2 + block.width) && (p2.y >= (height / 3) + block.height))
+	{
+		p2.floorHeight = (height / 3) + block.height;
+	}
+	else if ((p2.x >= width / 2 - 5) && (p2.x <= width / 2 + block.width) && (p2.y >= ((height / 3) * 2) + block.height))
+	{
+		p2.floorHeight = ((height / 3) * 2) + block.height;
+	}
+	else if ((p2.x >= width / 3 - 5) && (p2.x <= width / 3 + block.width) && (p2.y >= land.height + block.height))
+	{
+		p2.floorHeight = land.height + block.height;
+	}
+	else
+	{
+		p2.floorHeight = land.height + 5;
+	}
+}
+
 //draw on screen
 void draw() {
 	//clearing the screen
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
 
+	platform();
 	//put draw codes below
-	if (p1.y > land.height + p1.height)
+	if (p1.y > p1.floorHeight)
 	{
 		p1.y -= velY*0.8; //*0.8 for smoothing
 	}
-	if (p2.y > land.height + p2.height)
+	if (p2.y > p2.floorHeight)
 	{
 		p2.y -= velY*0.8; //*0.8 for smoothing
 	}
@@ -698,12 +747,12 @@ int main(int argc, char** argv)
 
 	//player init
 	p1.spawnx = 10;
-	p1.spawny = land.height + 2;
+	p1.spawny = land.height + 5;
 	p1.x = p1.spawnx;
 	p1.y = p1.spawny;
 
 	p2.spawnx = width - 40;
-	p2.spawny = land.height + 2;
+	p2.spawny = land.height + 5;
 	p2.x = p2.spawnx;
 	p2.y = p2.spawny;
 
