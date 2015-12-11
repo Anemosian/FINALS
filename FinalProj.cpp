@@ -32,6 +32,12 @@ class platform
 public:
 	float x, y;
 	float width, height;
+
+	platform()
+	{
+		width = 10;
+		height = 100;
+	}
 };
 
 class bullet
@@ -43,6 +49,7 @@ public:
 	float radius;
 	float speedx;
 	float speedy;
+	float bounces;
 
 	bullet()
 	{
@@ -103,10 +110,10 @@ public:
 	float lives;
 	float score;
 	float floorHeight;
-	bool fire;
+	bool fired;
 	bool dir;
 	bool lock;
-	String angle = "M";
+	string angle;
 	player()
 	{
 		height = 10;
@@ -115,15 +122,16 @@ public:
 		lives = 5;
 		dir = true;
 		lock = false;
+		fired = false;
+		angle = "M";
 	}
 };
 
 int bulletcount;
 
 player p1, p2;
-bullet b3[1000];
 bullet b1, b2;
-platform land;
+platform land, block;
 
 //window size and refresh rate
 int width = 1000;
@@ -135,7 +143,6 @@ float charSize = 10;
 
 //pause
 bool gamePause = false;
-
 
 //counter
 float t, dt;
@@ -171,12 +178,6 @@ return (n < upper) * n + !(n < upper) * upper;
 }
 */
 
-//void functions
-void addbullet()
-{
-	bulletcount++;
-}
-
 //keyboard controls
 void keyboard() {
 	if (GetAsyncKeyState(VK_P))
@@ -191,19 +192,19 @@ void keyboard() {
 
 	if (GetAsyncKeyState(VK_S))
 	{
-		if(p1.lock == false)
+		if (p1.lock == false)
 		{
-			if(p1.angle == "M")
+			if (p1.angle == "M")
 			{
 				p1.angle = "L";
 				b1.speedy = -2;
 			}
-			if(p1.angle == "L")
+			if (p1.angle == "L")
 			{
 				p1.angle = "H";
 				b1.speedy = 2;
 			}
-			if(p1.angle == "H")
+			if (p1.angle == "H")
 			{
 				p1.angle = "M";
 				b1.speedy = 0;
@@ -220,7 +221,7 @@ void keyboard() {
 			p1.dir = false;
 		}
 	}
-	
+
 	if (GetAsyncKeyState(VK_D))
 	{
 		if (p1.x + p1.width < width) {
@@ -234,8 +235,9 @@ void keyboard() {
 
 	if (GetAsyncKeyState(VK_F))
 	{
-		b3[bulletcount].x = p1.x;
-		b3[bulletcount].y = p1.y;
+		b1.x = p1.x;
+		b1.y = p1.y;
+		p1.lock = true;
 	}
 
 	//p2 controls
@@ -246,34 +248,23 @@ void keyboard() {
 
 	if (GetAsyncKeyState(VK_DOWN))
 	{
-		if(p2.lock == false)
+		if (p2.lock == false)
 		{
-			if(p2.angle == "M")
+			if (p2.angle == "M")
 			{
 				p2.angle = "L";
 				b2.speedy = -2;
 			}
-			if(p2.angle == "L")
+			if (p2.angle == "L")
 			{
 				p2.angle = "H";
 				b2.speedy = 2;
 			}
-			if(p2.angle == "H")
+			if (p2.angle == "H")
 			{
 				p2.angle = "M";
 				b2.speedy = 0;
 			}
-		}
-	}
-
-	if (GetAsyncKeyState(VK_RIGHT))
-	{
-		if (p2.x + p2.width < width) {
-			p2.x += p2.speed;
-		}
-		if (p2.lock == false)
-		{
-			p2.dir = true;
 		}
 	}
 
@@ -285,6 +276,17 @@ void keyboard() {
 		if (p2.lock == false)
 		{
 			p2.dir = false;
+		}
+	}
+
+	if (GetAsyncKeyState(VK_RIGHT))
+	{
+		if (p2.x + p2.width < width) {
+			p2.x += p2.speed;
+		}
+		if (p2.lock == false)
+		{
+			p2.dir = true;
 		}
 	}
 
@@ -300,10 +302,10 @@ void collisionChecker() {
 	//left wall collision
 	if (b1.x - b1.radius < 0)
 	{
-		if(b1.bounces < 5)
+		if (b1.bounces < 5)
 		{
 			b1.speedx *= -1;
-			b1.bounces ++;			
+			b1.bounces++;
 		}
 		else
 		{
@@ -318,10 +320,10 @@ void collisionChecker() {
 	}
 	if (b2.x - b2.radius < 0)
 	{
-		if(b2.bounces < 5)
+		if (b2.bounces < 5)
 		{
 			b2.speedx *= -1;
-			b2.bounces ++;			
+			b2.bounces++;
 		}
 		else
 		{
@@ -331,16 +333,16 @@ void collisionChecker() {
 			b2.speedx = -8;
 			b2.speedy = 0;
 			p2.lock = false;
-			p2.fired = false;	
+			p2.fired = false;
 		}
 	}
 	//right wall collision
 	if (b1.x + b1.radius> width)
 	{
-		if(b1.bounces < 5)
+		if (b1.bounces < 5)
 		{
 			b1.speedx *= -1;
-			b1.bounces ++;			
+			b1.bounces++;
 		}
 		else
 		{
@@ -353,12 +355,12 @@ void collisionChecker() {
 			p1.fired = false;
 		}
 	}
-	if (b2.x + b2.radius> width) 
+	if (b2.x + b2.radius> width)
 	{
-		if(b2.bounces < 5)
+		if (b2.bounces < 5)
 		{
 			b2.speedx *= -1;
-			b2.bounces ++;			
+			b2.bounces++;
 		}
 		else
 		{
@@ -368,7 +370,7 @@ void collisionChecker() {
 			b2.speedy = 0;
 			b2.bounces = 0;
 			p2.lock = false;
-			p2.fired = false;	
+			p2.fired = false;
 		}
 	}
 
@@ -376,10 +378,10 @@ void collisionChecker() {
 	//top /bot wall collision
 	if (b1.y + b1.radius > height - 20 || b1.y - b1.radius < 10)
 	{
-		if(b1.bounces < 5)
+		if (b1.bounces < 5)
 		{
 			b1.speedy *= -1;
-			b1.bounces ++;			
+			b1.bounces++;
 		}
 		else
 		{
@@ -394,10 +396,10 @@ void collisionChecker() {
 	}
 	if (b2.y + b2.radius > height - 20 || b2.y - b2.radius < 10)
 	{
-		if(b2.bounces < 5)
+		if (b2.bounces < 5)
 		{
 			b2.speedx *= -1;
-			b2.bounces ++;			
+			b2.bounces++;
 		}
 		else
 		{
@@ -407,13 +409,13 @@ void collisionChecker() {
 			b2.speedy = 0;
 			b2.bounces = 0;
 			p2.lock = false;
-			p2.fired = false;	
+			p2.fired = false;
 		}
 	}
 
 	//player collision
-	if ((b2.x + b2.radius  >= p1.x) &&
-		(b2.x + b2.radius  <= p1.x + p1.width) &&
+	if ((b2.x + b2.radius >= p1.x) &&
+		(b2.x + b2.radius <= p1.x + p1.width) &&
 		(b2.y + b2.radius <= p1.y + p1.height) &&
 		(b2.y + b2.radius >= p1.y))
 	{
@@ -508,7 +510,7 @@ void getplatforms() {
 		exit(1);
 	}
 	else {
-		
+
 
 		for (int i = 0; i < 12; i++)
 		{
@@ -518,7 +520,7 @@ void getplatforms() {
 
 	for (int cnt = 0; cnt < 12; cnt + 4)
 	{
-		boxDraw(stoi(platformdata[cnt]), stoi(platformdata[cnt + 1]),stoi( platformdata[cnt + 2]), stoi(platformdata[cnt + 3]));
+		boxDraw(stoi(platformdata[cnt]), stoi(platformdata[cnt + 1]), stoi(platformdata[cnt + 2]), stoi(platformdata[cnt + 3]));
 	}
 }
 
@@ -553,16 +555,8 @@ void bulletMove() {
 	}
 	else if (p2.dir == false)
 	{
-		b2.x -= b2.speedy;
+		b2.x -= b2.speedx;
 		b2.y += b2.speedy;
-	}
-	if (p1.dir == true)
-	{
-		b3[bulletcount].x += b3[bulletcount].speed;
-	}
-	else if (p1.dir == false)
-	{
-		b3[bulletcount].x -= b3[bulletcount].speed;
 	}
 	collisionChecker();
 }
@@ -588,16 +582,14 @@ void draw() {
 	ballDraw(b1.x, b1.y, b1.radius, b1.segments);
 	ballDraw(b2.x, b2.y, b2.radius, b2.segments);
 
-	ballDraw(b3[bulletcount].x, b3[bulletcount].y, b3[bulletcount].radius, b3[bulletcount].segments);
-
 	//paddle display
 	boxDraw(p1.x, p1.y, p1.width, p1.height);
 	boxDraw(p2.x, p2.y, p2.width, p2.height);
 	boxDraw(land.x, land.y, land.width, land.height);
-	
-	boxDraw(width/3, height/3, block.width, block.height);
-	boxDraw((width / 3)*2, height / 3, block.width, block.height);
-	boxDraw(width / 2, (height/3)*2 , block.width, block.height);
+
+	boxDraw(width / 3, height / 3, block.width, block.height);
+	boxDraw((width / 3) * 2, height / 3, block.width, block.height);
+	boxDraw(width / 2, (height / 3) * 2, block.width, block.height);
 	boxDraw(width / 2, land.height, block.width, block.height);
 
 	//score display
@@ -623,7 +615,7 @@ void update(int upvalue) {
 	dt = t - prevTime;
 	prevTime = t;
 	*/
-	
+
 	bulletMove();
 
 	//calls update in millisecs
