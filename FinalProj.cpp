@@ -41,13 +41,15 @@ public:
 	float y;
 	float segments;
 	float radius;
-	float speed;
+	float speedx;
+	float speedy;
 
 	bullet()
 	{
 		segments = 8;
 		radius = 5;
-		speed = 8;
+		speedx = 8;
+		speedy = 0;
 	}
 
 };
@@ -104,7 +106,7 @@ public:
 	bool fire;
 	bool dir;
 	bool lock;
-
+	String angle = "M";
 	player()
 	{
 		height = 10;
@@ -189,9 +191,25 @@ void keyboard() {
 
 	if (GetAsyncKeyState(VK_S))
 	{
-
+		if(p1.lock == false)
+		{
+			if(p1.angle == "M")
+			{
+				p1.angle = "L";
+				b1.speedy = -2;
+			}
+			if(p1.angle == "L")
+			{
+				p1.angle = "H";
+				b1.speedy = 2;
+			}
+			if(p1.angle == "H")
+			{
+				p1.angle = "M";
+				b1.speedy = 0;
+			}
+		}
 	}
-
 	if (GetAsyncKeyState(VK_A))
 	{
 		if (p1.x > 0) {
@@ -228,7 +246,24 @@ void keyboard() {
 
 	if (GetAsyncKeyState(VK_DOWN))
 	{
-
+		if(p2.lock == false)
+		{
+			if(p2.angle == "M")
+			{
+				p2.angle = "L";
+				b2.speedy = -2;
+			}
+			if(p2.angle == "L")
+			{
+				p2.angle = "H";
+				b2.speedy = 2;
+			}
+			if(p2.angle == "H")
+			{
+				p2.angle = "M";
+				b2.speedy = 0;
+			}
+		}
 	}
 
 	if (GetAsyncKeyState(VK_RIGHT))
@@ -421,20 +456,24 @@ void vecnorm(float &x, float &y) {
 void bulletMove() {
 	if (p1.dir == true)
 	{
-		b1.x += b1.speed;
+		b1.x += b1.speedx;
+		b1.y += b1.speedy;
 	}
 	else if (p1.dir == false)
 	{
-		b1.x -= b1.speed;
+		b1.x -= b1.speedx;
+		b1.y += b1.speedy;
 	}
 
 	if (p2.dir == true)
 	{
-		b2.x += b2.speed;
+		b2.x += b2.speedx;
+		b2.y += b2.speedy;
 	}
 	else if (p2.dir == false)
 	{
-		b2.x -= b2.speed;
+		b2.x -= b2.speedy;
+		b2.y += b2.speedy;
 	}
 	if (p1.dir == true)
 	{
