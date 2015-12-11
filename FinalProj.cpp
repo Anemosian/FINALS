@@ -446,6 +446,140 @@ void collisionChecker() {
 		p2.y = p2.spawny;
 		p2.lives--;
 	}
+		if(((b1.x+b1.radius >= width/3)&&
+		(b1.y + b1.radius >= height/3)&&
+		(b1.y + b1.radius <= height/3 + block.height))||
+		((b1.x+b1.radius >= (width/3)*2)&&
+		(b1.y + b1.radius >= height/3)&&
+		(b1.y + b1.radius <= height/3 + block.height))||
+		((b1.x+b1.radius >= width/2)&&
+		(b1.y + b1.radius >= (height/3)*2)&&
+		(b1.y + b1.radius <= (height/3)*2) + block.height))||
+		((b1.x+b1.radius >= width/2)&&
+		(b1.y + b1.radius >= land.height)&&
+		(b1.y + b1.radius <= land.height + block.height)))
+		{
+			if(b1.bounces < 5)
+			{	
+				b1.speedx *= -1;
+				b1.bounces ++;			
+			}
+			else
+			{
+				b1.x = 0;
+				b1.y = 0;
+				b1.bounces = 0;
+				b1.speedx = 8;
+				b1.speedy = 0;
+				p1.lock = false;
+				p1.fired = false;
+			}
+			
+		}	
+	if((b2.x+b2.radius >= width/3)&&
+		(b2.y + b2.radius >= height/3)&&
+		(b2.y + b2.radius <= height/3 + block.height))||
+		((b2.x+b2.radius >= (width/3)*2)&&
+		(b2.y + b2.radius >= height/3)&&
+		(b2.y + b2.radius <= height/3 + block.height))||
+		((b2.x+b2.radius >= width/2)&&
+		(b2.y + b2.radius >= (height/3)*2)&&
+		(b2.y + b2.radius <= (height/3)*2) + block.height))||
+		((b2.x+b2.radius >= width/2)&&
+		(b2.y + b2.radius >= land.height)&&
+		(b2.y + b2.radius <= land.height + block.height))
+		{
+			if(b2.bounces < 5)
+			{	
+				b2.speedx *= -1;
+				b2.bounces ++;			
+			}
+			else
+			{
+				b2.x = 0;
+				b2.y = 0;
+				b2.bounces = 0;
+				b2.speedx = 8;
+				b2.speedy = 0;
+				p2.lock = false;
+				p2.fired = false;
+			}
+			
+		}	
+			
+			
+				
+			
+		if(((b1.x+b1.radius <= width/3 + block.width)&&
+		(b1.y + b1.radius >= height/3)&&
+		(b1.y + b1.radius <= height/3 + block.height))||
+		((b1.x+b1.radius <= (width/3)*2+ block.width)&&
+		(b1.y + b1.radius >= height/3)&&
+		(b1.y + b1.radius <= height/3 + block.height))||
+		((b1.x+b1.radius <= width/2+ block.width)&&
+		(b1.y + b1.radius >= (height/3)*2)&&
+		(b1.y + b1.radius <= (height/3)*2) + block.height))||
+		((b1.x+b1.radius <= width/2+ block.width)&&
+		(b1.y + b1.radius >= land.height)&&
+		(b1.y + b1.radius <= land.height + block.height)))
+		{
+			if(b1.bounces < 5)
+			{	
+				b1.speedx *= -1;
+				b1.bounces ++;			
+			}
+			else
+			{
+				b1.x = 0;
+				b1.y = 0;
+				b1.bounces = 0;
+				b1.speedx = 8;
+				b1.speedy = 0;
+				p1.lock = false;
+				p1.fired = false;
+			}
+			
+		}	
+		if(((b2.x+b2.radius <= width/3 + block.width)&&
+		(b2.y + b2.radius >= height/3)&&
+		(b2.y + b2.radius <= height/3 + block.height))||
+		((b2.x+b2.radius <= (width/3)*2+ block.width)&&
+		(b2.y + b2.radius >= height/3)&&
+		(b2.y + b2.radius <= height/3 + block.height))||
+		((b2.x+b2.radius <= width/2+ block.width)&&
+		(b2.y + b2.radius >= (height/3)*2)&&
+		(b2.y + b2.radius <= (height/3)*2) + block.height))||
+		((b2.x+b2.radius <= width/2+ block.width)&&
+		(b2.y + b2.radius >= land.height)&&
+		(b2.y + b2.radius <= land.height + block.height)))
+		{
+			if(b2.bounces < 5)
+			{	
+				b2.speedx *= -1;
+				b2.bounces ++;			
+			}
+			else
+			{
+				b2.x = 0;
+				b2.y = 0;
+				b2.bounces = 0;
+				b2.speedx = 8;
+				b2.speedy = 0;
+				p2.lock = false;
+				p2.fired = false;
+			}
+			
+		}	
+			
+			
+				
+			
+		
+			
+			
+				
+			
+		
 }
 
 //makes gl recognized 2d usage
